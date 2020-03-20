@@ -26,8 +26,8 @@ from skimage.color import label2rgb
 from skimage.feature import greycomatrix
 
 # settings for LBP
-radius = 3
-n_points = 8 * radius
+radius = 2
+n_points = 2 * radius
 
 
 def overlay_labels(image, lbp, labels):
@@ -42,19 +42,25 @@ def highlight_bars(bars, indexes):
 
 image = cv2.imread('foto1.jpg', 0)
 image2 = cv2.imread('foto2.jpg', 0)
+image3 = cv2.imread('foto2.jpg', 0)
+image3 = cv2.flip(image3, 0)
+
 lbp = local_binary_pattern(image, n_points, radius, METHOD)
 lbp2 = local_binary_pattern(image2, n_points, radius, METHOD)
+lbp3 = local_binary_pattern(image3, n_points, radius, METHOD)
 
+n_bins = int(lbp.max() + 1)
 
 def hist(ax, lbp):
     n_bins = int(lbp.max() + 1)
-    print('n_bins = ', n_bins) # Print n_bins value
     return ax.hist(lbp.ravel(), density=True, bins=n_bins, range=(0, n_bins),
                    facecolor='0.5')
 
 # plot histograms of LBP of textures
 fig, (ax_img, ax_hist) = plt.subplots(nrows=2, ncols=3, figsize=(9, 6))
 fig2, (ax_img2, ax_hist2) = plt.subplots(nrows=2, ncols=3, figsize=(9, 6))
+fig3, (ax_img3, ax_hist3) = plt.subplots(nrows=2, ncols=3, figsize=(9, 6))
+
 plt.gray()
 
 titles = ('edge', 'flat', 'corner')
@@ -73,8 +79,12 @@ for ax, labels in zip(ax_img, label_sets):
     ax.imshow(overlay_labels(image, lbp, labels))
 
 for ax2, labels in zip(ax_img2, label_sets):
-    ax2.imshow(overlay_labels(image2, lbp, labels))
+    ax2.imshow(overlay_labels(image2, lbp2, labels))
 
+for ax3, labels in zip(ax_img3, label_sets):
+    ax3.imshow(overlay_labels(image3, lbp3, labels))
+
+print('n_bins = ', n_bins)
 for ax, labels, name in zip(ax_hist, label_sets, titles):
     counts, _, bars = hist(ax, lbp)
     highlight_bars(bars, labels)
@@ -82,11 +92,14 @@ for ax, labels, name in zip(ax_hist, label_sets, titles):
     ax.set_xlim(right=n_points + 2)
     ax.set_title(name)
 
-for i in range(26):
-    print ('%.8f'%counts[i])
-
 # print(counts) # Print counts of feature
+for i in range(n_bins):
+    print ('%.8f'%counts[i])
+ax_hist[0].set_ylabel('Percentage')
 
+###
+
+print('n_bins = ', n_bins)
 for ax, labels, name in zip(ax_hist2, label_sets, titles):
     counts2, _, bars = hist(ax, lbp2)
     highlight_bars(bars, labels)
@@ -95,15 +108,34 @@ for ax, labels, name in zip(ax_hist2, label_sets, titles):
     ax.set_title(name)
 
 # print(counts2) # Print counts of feature
-for i in range(26):
+for i in range(n_bins):
     print ('%.8f'%counts2[i])
+ax_hist2[0].set_ylabel('Percentage')
 
-ax_hist[0].set_ylabel('Percentage')
+###
+
+print('n_bins = ', n_bins)
+for ax, labels, name in zip(ax_hist3, label_sets, titles):
+    counts3, _, bars = hist(ax, lbp3)
+    highlight_bars(bars, labels)
+    ax.set_ylim(top=np.max(counts[:-1]))
+    ax.set_xlim(right=n_points + 2)
+    ax.set_title(name)
+
+# print(counts2) # Print counts of feature
+for i in range(n_bins):
+    print ('%.8f'%counts3[i])
+ax_hist2[0].set_ylabel('Percentage')
+
+###
 
 for ax in ax_img:
     ax.axis('off')
 
 for ax in ax_img2:
+    ax.axis('off')
+
+for ax in ax_img3:
     ax.axis('off')
 
 plt.show()
