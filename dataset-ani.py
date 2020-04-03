@@ -14,7 +14,7 @@ dataset = {}
 ########################################
 #membaca dataset dan menyimpan ke dictionary
 
-directory = r'E:\py\citra03\dataset'
+directory =r"D:\Teknik Informatika\CV\citra02\citra02\Dataset"
 listds = os.listdir(directory)
 number_files = len(listds)
 
@@ -27,8 +27,9 @@ for i in range(number_files):
 	lbp = local_binary_pattern(image, n_points, radius, METHOD)
 
 	hist, _ = np.histogram(lbp, density=True, bins=6, range=(0,6))
-
-	nrp = '0000' + str(i)
+	
+	j = i+31
+	nrp = '21031810' + str(j)
 
 	dataset.update({nrp : hist})
 
@@ -48,7 +49,7 @@ def match(counts):
 	return best_name
 
 
-directory = r'E:\py\citra03\testing'
+directory = r"D:\Teknik Informatika\CV\citra02\citra02\Testing01"
 listds = os.listdir(directory)
 number_files = len(listds)
 os.chdir(directory)
@@ -61,7 +62,8 @@ for i in range(number_files):
 
 	hist, _ = np.histogram(lbp, density=True, bins=6, range=(0,6))
 
-	nrp = 'T000' + str(i)
+	j = i+31
+	nrp = '21031810' + str(j)
 
 	print('gambar : ' + image_name + '/nrp : ' + nrp)
 	print('result : ' + match(hist))
