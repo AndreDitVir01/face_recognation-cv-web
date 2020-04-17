@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-img = cv2.imread('TestingAll/2018D3ITB04.jpeg')
+img = cv2.imread('foto_irva.jpeg')
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 faces = face_cascade.detectMultiScale(gray, 1.3, 5)
@@ -43,8 +43,8 @@ for (x, y, w, h) in faces:
     i+=1
 
 plt.show()
-status = cv2.imwrite('faces_detected.jpg', img)
-print("[INFO] img faces_detected.jpg written to filesystem: ", status)
+status = cv2.imwrite('foto_irva_detected.jpg', img)
+print("[INFO] img irva.jpg written to filesystem: ", status)
 
 ## SHOW THEM!
 cv2.waitKey(0)

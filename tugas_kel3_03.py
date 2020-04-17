@@ -20,30 +20,34 @@ arr = os.listdir()
 
 ## Mendeteksi wajah dengan haarcascades
 face_cascade = cv2.CascadeClassifier('D:\\Teknik Informatika\\CV\\citra02\\citra02\\haarcascade_frontalface_default.xml')
+c = 31
 for k in range(number_files):
 	image_name = arr[k]
-	img = cv2.imread(image_name)
-	gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	image = cv2.imread(image_name)
+	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	faces = face_cascade.detectMultiScale(gray, 1.3, 5)
 	for (x,y,w,h) in faces:
 		### Pemberian kotak biru untuk penanda
-		# img = cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
+		img = cv2.rectangle(image,(x,y),(x+w,y+h),(255,0,0),2)
 		roi_gray = gray[y:y+h, x:x+w]
 		roi_color = img[y:y+h, x:x+w]
 	print("Ditemukan {0} wajah!".format(len(faces)))
     # SAVE THEM!
 	for (x, y, w, h) in faces:
+		### Pemberian kotak hijau untuk penanda simpan
+		cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 		roi_color = img[y:y + h, x:x + w]
 		print("[INFO] Object found. Saving locally.")
-		cv2.imwrite('D:\\Teknik Informatika\\CV\\citra02\\citra02\\TempTestArea\\' + str(w) + str(h) + '_faces.jpg', roi_color)
+		cv2.imwrite('D:\\Teknik Informatika\\CV\\citra02\\citra02\\TempTestArea\\21031810' + str(c) +'_face.jpg', roi_color)
+		c+=1
 
 # EKSTRAKSI FITUR
 METHOD = 'uniform'
 script_path = os.path.dirname(os.path.realpath(__file__))
 
 # settings for LBP
-radius = 3
-n_points = 8 * radius
+radius = 2
+n_points = 2 * radius
 dataset = {}
 
 ###############################################
@@ -74,7 +78,7 @@ arr = os.listdir()
 
 # Menampilkan nama path DATASET
 print("Dataset = " + maps_path)
-print("Number files testing = " + str(number_files))
+print("Number files dataset = " + str(number_files))
 
 # Looping untuk DATASET
 j = 31
@@ -124,7 +128,7 @@ arr = os.listdir()
 
 # Menampilkan nama path DATASET
 print("Testing = " + maps_path)
-print("Number files dataset = " + str(number_files))
+print("Number files testing = " + str(number_files))
 
 counterOfStatus = 0
 for i in range(number_files):
@@ -142,7 +146,7 @@ for i in range(number_files):
 	elif(j==58):
 		j+=2
 
-	nrp = str(j)
+	nrp = '21031810' + str(j)
 
 	status = "0"
 	if(nrp == match(hist)):
